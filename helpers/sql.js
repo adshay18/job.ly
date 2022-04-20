@@ -27,4 +27,5 @@ function sqlForPartialUpdate(dataToUpdate, jsToSql) {
  *      values: ['Aliya', 32]}
  */
 
+// Only function in this file so include as const sqlForPartialUpdate = require('PATH') or {sqlForPartialUpdate} = requrie('PATH')
 module.exports = { sqlForPartialUpdate };
