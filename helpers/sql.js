@@ -23,7 +23,7 @@ function sqlForPartialUpdate(dataToUpdate, jsToSql) {
 }
 /**
  * sqlForPartialUpdate({firstName: 'Aliya', age: 32}, {firstName: 'first_name', age: 'age'})
- * => {setCols: ['"first_name=$1"', '"age=$2"'],
+ * => {setCols: '"first_name"=$1, "age"=$2',
  *      values: ['Aliya', 32]}
  */
 
