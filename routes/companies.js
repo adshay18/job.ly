@@ -10,6 +10,7 @@ const { ensureLoggedIn } = require('../middleware/auth');
 const Company = require('../models/company');
 
 const companyNewSchema = require('../schemas/companyNew.json');
+const searchCompaniesSchema = require('../schemas/searchCompanies.json');
 const companyUpdateSchema = require('../schemas/companyUpdate.json');
 
 const router = new express.Router();
@@ -55,7 +56,7 @@ router.get('/', async function(req, res, next) {
 		if (query.minEmployees) query.minEmployees = parseInt(query.minEmployees);
 		if (query.maxEmployees) query.maxEmployees = parseInt(query.maxEmployees);
 
-		const validator = jsonschema.validate(q, searchCompaniesSchema);
+		const validator = jsonschema.validate(query, searchCompaniesSchema);
 		if (!validator.valid) {
 			const errs = validator.errors.map((e) => e.stack);
 			throw new BadRequestError(errs);

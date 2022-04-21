@@ -40,6 +40,9 @@ class Company {
 
 	/** Find all companies.
    *
+   * Can pass in a filter object that follows the schema for searchCompanies { name, minEmployees, maxEmployees }
+      * Returns all companies if filter is left blank
+   *
    * Returns [{ handle, name, description, numEmployees, logoUrl }, ...]
    * */
 
@@ -49,37 +52,48 @@ class Company {
                   description,
                   num_employees AS "numEmployees",
                   logo_url AS "logoUrl"
-           FROM companies
-           ORDER BY name`;
+           FROM companies`;
+
+		/** The above query string will be manipulated by our filters, and prevent SQL injections
+     * values will be used as parameters in our final query
+     * extenders will be used as WHERE expressions
+     */
 
 		let values = [];
 		let extenders = [];
 
 		const { minEmployees, maxEmployees, name } = filters;
 
+		// Min must be less than max
 		if (minEmployees > maxEmployees) {
 			throw new BadRequestError('Max employees must be greater than min');
 		}
 
-		if (name) {
-			values.push(`%${name}%`);
-			extenders.push('name ILIKE $1');
-		}
-
+		// Set minimum value
 		if (minEmployees) {
 			values.push(minEmployees);
-			extenders.push('num_employees >= $2');
+			extenders.push(`num_employees >= $${values.length}`);
 		}
 
+		// Set maximum value
 		if (maxEmployees) {
 			values.push(maxEmployees);
-			extenders.push('num_employees <= $3');
+			extenders.push(`num_employees <= $${values.length}`);
 		}
 
+		// Search names, case insensitive
+		if (name) {
+			values.push(`%${name}%`);
+			extenders.push(`name ILIKE $${values.length}`);
+		}
+
+		// Build query string
 		if (extenders.length > 0) {
 			query += ' WHERE ' + extenders.join(' AND ');
 		}
 
+		// Order received data
+		query += ' ORDER BY name';
 		const companiesRes = await db.query(query, values);
 
 		return companiesRes.rows;
