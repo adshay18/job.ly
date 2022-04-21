@@ -57,8 +57,29 @@ function isLoggedInAdmin(req, res, next) {
 	}
 }
 
+/** Middleware to ensure user is editing their own data, or user is an Admin
+ * 
+ * If not, raises Unauthorized.
+ */
+
+function adminOrCorrectUser(req, res, next) {
+	try {
+		const user = res.locals.user;
+		if (!user) {
+			throw new UnauthorizedError('Unauthorized - please login');
+		}
+		if (!(user.isAdmin || user.username === req.params.username)) {
+			throw new UnauthorizedError(`Unauthorized - changes can only be made by ${user.username} or an Admin`);
+		}
+		return next();
+	} catch (err) {
+		return next(err);
+	}
+}
+
 module.exports = {
 	authenticateJWT,
 	ensureLoggedIn,
-	isLoggedInAdmin
+	isLoggedInAdmin,
+	adminOrCorrectUser
 };
