@@ -1,0 +1,38 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema",
+	"$id": "http://example.com/example.json",
+	"type": "object",
+	"examples": [
+		{
+			"title": "librarian",
+			"minSalary": 50000,
+			"hasEquity": true
+		}
+	],
+	"required": [],
+	"properties": {
+		"title": {
+			"$id": "#/properties/title",
+			"type": "string",
+			"description": "Title of the job to search database.",
+			"default": "",
+			"examples": [ "librarian" ]
+		},
+		"minSalary": {
+			"$id": "#/properties/minSalary",
+			"type": "integer",
+			"description": "Minimum salary for a job.",
+			"default": "",
+			"minimum": 0,
+			"examples": [ 50000 ]
+		},
+		"hasEquity": {
+			"$id": "#/properties/hasEquity",
+			"type": "boolean",
+			"description": "Considers whether there is equity or not.",
+			"default": "",
+			"examples": [ true ]
+		}
+	},
+	"additionalProperties": false
+}
