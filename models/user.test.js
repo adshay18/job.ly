@@ -3,7 +3,7 @@
 const { NotFoundError, BadRequestError, UnauthorizedError } = require('../expressError');
 const db = require('../db.js');
 const User = require('./user.js');
-const { commonBeforeAll, commonBeforeEach, commonAfterEach, commonAfterAll } = require('./_testCommon');
+const { commonBeforeAll, commonBeforeEach, commonAfterEach, commonAfterAll, idArr } = require('./_testCommon');
 
 beforeAll(commonBeforeAll);
 beforeEach(commonBeforeEach);
@@ -215,6 +215,31 @@ describe('remove', function() {
 			fail();
 		} catch (err) {
 			expect(err instanceof NotFoundError).toBeTruthy();
+		}
+	});
+});
+
+/******* apply */
+
+describe('apply', function() {
+	test('works', async function() {
+		await User.apply('u1', idArr[0]);
+		const found = await db.query(`SELECT * FROM applications WHERE username = $1`, [ 'u1' ]);
+		expect(found.rows.length).toEqual(1);
+	});
+
+	test('404 if username not found', async function() {
+		try {
+			await User.apply('nope', idArr[0]);
+		} catch (err) {
+			expect(err.status).toEqual(404);
+		}
+	});
+	test('404 if job not found', async function() {
+		try {
+			await User.apply('u1', 2);
+		} catch (err) {
+			expect(err.status).toEqual(404);
 		}
 	});
 });
