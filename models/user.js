@@ -100,22 +100,15 @@ class User {
            FROM users
            ORDER BY username`
 		);
-		console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>');
-		console.log(result.rows);
 
 		for (let user of result.rows) {
 			const applicationRes = await db.query(`SELECT job_id AS "jobId" FROM applications WHERE username = $1`, [
 				user.username
 			]);
 			let jobIds = applicationRes.rows;
-			console.log('==============');
-			console.log(user.username);
 			const idBin = [];
 			if (jobIds) {
-				console.log('-------------------');
 				for (let job of jobIds) {
-					console.log('*************');
-					console.log(job);
 					idBin.push(job.jobId);
 				}
 			}
