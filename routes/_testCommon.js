@@ -79,8 +79,16 @@ async function commonBeforeAll() {
 		companyHandle: 'c3'
 	});
 
-	let job = await db.query(`SELECT id FROM jobs WHERE title = 'Librarian'`);
-	idArr.push(job.rows[0].id);
+	let result = await db.query(`SELECT id FROM jobs WHERE title = 'Librarian'`);
+	let id = result.rows[0].id;
+	idArr.push(id);
+
+	await db.query(
+		`
+		INSERT INTO applications (username, job_id)
+		VALUES ('u1', ${idArr[0]}),
+				('u2', ${idArr[0]})`
+	);
 }
 
 async function commonBeforeEach() {

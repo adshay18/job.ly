@@ -101,20 +101,31 @@ describe('register', function() {
 describe('findAll', function() {
 	test('works', async function() {
 		const users = await User.findAll();
+
 		expect(users).toEqual([
 			{
 				username: 'u1',
 				firstName: 'U1F',
 				lastName: 'U1L',
 				email: 'u1@email.com',
-				isAdmin: true
+				isAdmin: true,
+				jobs: [ idArr[0] ]
 			},
 			{
 				username: 'u2',
 				firstName: 'U2F',
 				lastName: 'U2L',
 				email: 'u2@email.com',
-				isAdmin: false
+				isAdmin: false,
+				jobs: [ idArr[0] ]
+			},
+			{
+				username: 'u3',
+				firstName: 'U3F',
+				lastName: 'U3L',
+				email: 'u3@email.com',
+				isAdmin: false,
+				jobs: []
 			}
 		]);
 	});
@@ -130,7 +141,8 @@ describe('get', function() {
 			firstName: 'U1F',
 			lastName: 'U1L',
 			email: 'u1@email.com',
-			isAdmin: true
+			isAdmin: true,
+			jobs: [ idArr[0] ]
 		});
 	});
 
@@ -223,8 +235,8 @@ describe('remove', function() {
 
 describe('apply', function() {
 	test('works', async function() {
-		await User.apply('u1', idArr[0]);
-		const found = await db.query(`SELECT * FROM applications WHERE username = $1`, [ 'u1' ]);
+		await User.apply('u3', idArr[0]);
+		const found = await db.query(`SELECT * FROM applications WHERE username = $1`, [ 'u3' ]);
 		expect(found.rows.length).toEqual(1);
 	});
 

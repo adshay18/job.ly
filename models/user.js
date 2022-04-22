@@ -6,6 +6,7 @@ const { sqlForPartialUpdate } = require('../helpers/sql');
 const { NotFoundError, BadRequestError, UnauthorizedError } = require('../expressError');
 
 const { BCRYPT_WORK_FACTOR } = require('../config.js');
+const { user } = require('pg/lib/defaults');
 
 /** Related functions for users. */
 
@@ -99,6 +100,27 @@ class User {
            FROM users
            ORDER BY username`
 		);
+		console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>');
+		console.log(result.rows);
+
+		for (let user of result.rows) {
+			const applicationRes = await db.query(`SELECT job_id AS "jobId" FROM applications WHERE username = $1`, [
+				user.username
+			]);
+			let jobIds = applicationRes.rows;
+			console.log('==============');
+			console.log(user.username);
+			const idBin = [];
+			if (jobIds) {
+				console.log('-------------------');
+				for (let job of jobIds) {
+					console.log('*************');
+					console.log(job);
+					idBin.push(job.jobId);
+				}
+			}
+			user.jobs = idBin;
+		}
 
 		return result.rows;
 	}
@@ -126,6 +148,20 @@ class User {
 		const user = userRes.rows[0];
 
 		if (!user) throw new NotFoundError(`No user: ${username}`);
+
+		const applicationRes = await db.query(
+			`SELECT job_id AS "jobId"
+				FROM applications
+				WHERE username = $1`,
+			[ user.username ]
+		);
+		const jobIds = applicationRes.rows;
+		const idBin = [];
+		for (let job of jobIds) {
+			idBin.push(job.jobId);
+		}
+
+		user.jobs = idBin;
 
 		return user;
 	}

@@ -10,6 +10,8 @@ async function commonBeforeAll() {
 	await db.query('DELETE FROM companies');
 	// noinspection SqlWithoutWhere
 	await db.query('DELETE FROM users');
+	await db.query('DELETE FROM jobs');
+	await db.query('DELETE FROM applications');
 
 	await db.query(`
     INSERT INTO companies(handle, name, num_employees, description, logo_url)
@@ -25,9 +27,14 @@ async function commonBeforeAll() {
                           last_name,
                           email, is_admin)
         VALUES ('u1', $1, 'U1F', 'U1L', 'u1@email.com', true),
-               ('u2', $2, 'U2F', 'U2L', 'u2@email.com', false)
+               ('u2', $2, 'U2F', 'U2L', 'u2@email.com', false),
+			   ('u3', $3, 'U3F', 'U3L', 'u3@email.com', false)
         RETURNING username`,
-		[ await bcrypt.hash('password1', BCRYPT_WORK_FACTOR), await bcrypt.hash('password2', BCRYPT_WORK_FACTOR) ]
+		[
+			await bcrypt.hash('password1', BCRYPT_WORK_FACTOR),
+			await bcrypt.hash('password2', BCRYPT_WORK_FACTOR),
+			await bcrypt.hash('password3', BCRYPT_WORK_FACTOR)
+		]
 	);
 
 	await db.query(
@@ -43,6 +50,13 @@ async function commonBeforeAll() {
 
 	let job = await db.query(`SELECT id FROM jobs WHERE title = 'j1'`);
 	idArr.push(job.rows[0].id);
+
+	await db.query(
+		`
+		INSERT INTO applications (username, job_id)
+		VALUES ('u1', ${idArr[0]}),
+				('u2', ${idArr[0]})`
+	);
 }
 
 async function commonBeforeEach() {

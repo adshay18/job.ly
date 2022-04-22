@@ -12,7 +12,8 @@ const {
 	commonAfterEach,
 	commonAfterAll,
 	u1Token,
-	adminToken
+	adminToken,
+	idArr
 } = require('./_testCommon');
 
 beforeAll(commonBeforeAll);
@@ -138,21 +139,24 @@ describe('GET /users', function() {
 					firstName: 'U1F',
 					lastName: 'U1L',
 					email: 'user1@user.com',
-					isAdmin: false
+					isAdmin: false,
+					jobs: [ idArr[0] ]
 				},
 				{
 					username: 'u2',
 					firstName: 'U2F',
 					lastName: 'U2L',
 					email: 'user2@user.com',
-					isAdmin: false
+					isAdmin: false,
+					jobs: [ idArr[0] ]
 				},
 				{
 					username: 'u3',
 					firstName: 'U3F',
 					lastName: 'U3L',
 					email: 'user3@user.com',
-					isAdmin: false
+					isAdmin: false,
+					jobs: []
 				}
 			]
 		});
@@ -189,7 +193,8 @@ describe('GET /users/:username', function() {
 				firstName: 'U1F',
 				lastName: 'U1L',
 				email: 'user1@user.com',
-				isAdmin: false
+				isAdmin: false,
+				jobs: [ idArr[0] ]
 			}
 		});
 	});
