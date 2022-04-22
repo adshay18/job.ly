@@ -117,7 +117,15 @@ describe('GET /companies/:handle', function() {
 				name: 'C1',
 				description: 'Desc1',
 				numEmployees: 1,
-				logoUrl: 'http://c1.img'
+				logoUrl: 'http://c1.img',
+				jobs: [
+					{
+						equity: '0.03',
+						id: expect.any(Number),
+						salary: 50000,
+						title: 'New Job'
+					}
+				]
 			}
 		});
 	});
@@ -130,7 +138,8 @@ describe('GET /companies/:handle', function() {
 				name: 'C2',
 				description: 'Desc2',
 				numEmployees: 2,
-				logoUrl: 'http://c2.img'
+				logoUrl: 'http://c2.img',
+				jobs: []
 			}
 		});
 	});
