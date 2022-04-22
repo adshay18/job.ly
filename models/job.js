@@ -20,7 +20,7 @@ class Job {
 			`SELECT title, company_handle
        FROM jobs
        WHERE title = $1 AND company_handle = $2`,
-			[ title, company_handle ]
+			[ title, companyHandle ]
 		);
 
 		if (duplicateCheck.rows[0]) throw new BadRequestError(`Duplicate job: ${title}`);

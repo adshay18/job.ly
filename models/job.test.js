@@ -18,7 +18,7 @@ describe('create job', function() {
 		title: 'New Assistant',
 		salary: 45000,
 		equity: 0.01,
-		company_handle: 'c2'
+		companyHandle: 'c2'
 	};
 
 	test('works', async function() {
@@ -39,7 +39,7 @@ describe('create job', function() {
 			title: 'j1',
 			salary: 12,
 			equity: 0,
-			company_handle: 'c2'
+			companyHandle: 'c2'
 		};
 		try {
 			await Job.create(duplicateJob);
