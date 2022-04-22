@@ -26,7 +26,7 @@ class Job {
 		if (duplicateCheck.rows[0]) throw new BadRequestError(`Duplicate job: ${title}`);
 
 		const result = await db.query(
-			`INSERT INTO companies (title, salary, equity, company_handle)
+			`INSERT INTO jobs (title, salary, equity, company_handle)
             VALUES ($1, $2, $3, $4)
             RETURNING title, salary, equity, company_handle AS "companyHandle"
             `,
@@ -129,8 +129,8 @@ class Job {
    *
    * Throws NotFoundError if not found.
    */
-	static async update(handle, data) {
-		const { setCols, values } = sqlForPartialUpdate(data, { title, salary, equity });
+	static async update(title, data) {
+		const { setCols, values } = sqlForPartialUpdate(data, { companyHandle: 'company_handle' });
 		const titleVarIdx = '$' + (values.length + 1);
 
 		const querySql = `UPDATE jobs 
@@ -156,7 +156,7 @@ class Job {
 	static async remove(title) {
 		const result = await db.query(
 			`DELETE
-           FROM companies
+           FROM jobs
            WHERE title = $1
            RETURNING title`,
 			[ title ]
