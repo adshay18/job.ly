@@ -67,16 +67,16 @@ router.get('/', async function(req, res, next) {
 	}
 });
 
-/** GET /[title]  =>  { job }
+/** GET /[id]  =>  { job }
  *
- *  Job is {  title, salary, equity, companyHandle }
+ *  Job is {  id, title, salary, equity, companyHandle }
  *
  * Authorization required: none
  */
 
-router.get('/:title', async function(req, res, next) {
+router.get('/:id', async function(req, res, next) {
 	try {
-		const job = await Job.get(req.params.title);
+		const job = await Job.get(req.params.id);
 		return res.json({ job });
 	} catch (err) {
 		return next(err);

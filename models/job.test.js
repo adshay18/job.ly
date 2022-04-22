@@ -4,7 +4,7 @@ const db = require('../db.js');
 const { BadRequestError, NotFoundError } = require('../expressError');
 const Company = require('./company.js');
 const Job = require('./job.js');
-const { commonBeforeAll, commonBeforeEach, commonAfterEach, commonAfterAll } = require('./_testCommon');
+const { commonBeforeAll, commonBeforeEach, commonAfterEach, commonAfterAll, idArr } = require('./_testCommon');
 
 beforeAll(commonBeforeAll);
 beforeEach(commonBeforeEach);
@@ -107,8 +107,9 @@ describe('findAll', function() {
 
 describe('get', function() {
 	test('works', async function() {
-		let job = await Job.get('j1');
+		let job = await Job.get(idArr[0]);
 		expect(job).toEqual({
+			id: idArr[0],
 			title: 'j1',
 			salary: 35000,
 			equity: '0',
@@ -118,7 +119,7 @@ describe('get', function() {
 
 	test('404 if not found', async function() {
 		try {
-			await Job.get('halo');
+			await Job.get(99999);
 		} catch (err) {
 			expect(err.status).toEqual(404);
 		}

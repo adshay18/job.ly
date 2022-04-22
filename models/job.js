@@ -95,25 +95,26 @@ class Job {
 		return jobs.rows;
 	}
 
-	/** Given a job title, return info about the job.
+	/** Given a job id, return info about the job.
      * 
-     * Returns { title, salary, equity, companyHandle}
+     * Returns { id, title, salary, equity, companyHandle}
      * 
      * Throws NotFoundError if not found
      */
 
-	static async get(title) {
+	static async get(id) {
 		const jobRes = await db.query(
-			`SELECT title,
+			`SELECT id,
+					title,
                     salary,
                     equity,
                     company_handle AS "companyHandle"
                     FROM jobs
-                    WHERE title = $1`,
-			[ title ]
+                    WHERE id = $1`,
+			[ id ]
 		);
 		const job = jobRes.rows[0];
-		if (!job) throw new NotFoundError(`No job title: ${title}`);
+		if (!job) throw new NotFoundError(`No job with id: ${id}`);
 
 		return job;
 	}

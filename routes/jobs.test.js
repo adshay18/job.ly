@@ -11,7 +11,8 @@ const {
 	commonAfterEach,
 	commonAfterAll,
 	u1Token,
-	adminToken
+	adminToken,
+	idArr
 } = require('./_testCommon');
 const Job = require('../models/job');
 
@@ -107,13 +108,14 @@ describe('GET /jobs', function() {
 	});
 });
 
-/****** GET /jobs/:title */
+/****** GET /jobs/:id */
 
-describe('GET /jobs/:title', function() {
+describe('GET /jobs/:id', function() {
 	test('works for anon', async function() {
-		const resp = await request(app).get(`/jobs/Librarian`);
+		const resp = await request(app).get(`/jobs/${idArr[0]}`);
 		expect(resp.body).toEqual({
 			job: {
+				id: idArr[0],
 				title: 'Librarian',
 				salary: 10000,
 				equity: '0.99',
@@ -123,7 +125,7 @@ describe('GET /jobs/:title', function() {
 	});
 
 	test('not found for no such job', async function() {
-		const resp = await request(app).get(`/jobs/nope`);
+		const resp = await request(app).get(`/jobs/9999999`);
 		expect(resp.statusCode).toEqual(404);
 	});
 });
