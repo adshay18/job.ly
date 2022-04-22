@@ -9,13 +9,13 @@ const { sqlForPartialUpdate } = require('../helpers/sql');
 class Job {
 	/** Create a job (from data), update db, return new job data.
    *
-   * data should be { title, salary, equity, company_handle }
+   * data should be { title, salary, equity, companyHandle }
    *
    * Returns { title, salary, equity, companyHandle }
    *
    * Throws BadRequestError if job already in database.
    * */
-	static async create({ title, salary, equity, company_handle }) {
+	static async create({ title, salary, equity, companyHandle }) {
 		const duplicateCheck = await db.query(
 			`SELECT title, company_handle
        FROM jobs
@@ -30,7 +30,7 @@ class Job {
             VALUES ($1, $2, $3, $4)
             RETURNING title, salary, equity, company_handle AS "companyHandle"
             `,
-			[ title, salary, equity, company_handle ]
+			[ title, salary, equity, companyHandle ]
 		);
 		const job = result.rows[0];
 		return job;
