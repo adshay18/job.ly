@@ -90,7 +90,7 @@ router.get('/:title', async function(req, res, next) {
  *
  * Returns { title, salary, equity, companyHandle }
  *
- * Authorization required: login
+ * Authorization required: admin
  */
 
 router.patch('/:title', isLoggedInAdmin, async function(req, res, next) {
@@ -107,4 +107,19 @@ router.patch('/:title', isLoggedInAdmin, async function(req, res, next) {
 		return next(err);
 	}
 });
+
+/** DELETE /[title]  =>  { deleted: title }
+ *
+ * Authorization: admin
+ */
+
+router.delete('/:title', isLoggedInAdmin, async function(req, res, next) {
+	try {
+		await Job.remove(req.params.title);
+		return res.json({ deleted: req.params.title });
+	} catch (err) {
+		return next(err);
+	}
+});
+
 module.exports = router;
